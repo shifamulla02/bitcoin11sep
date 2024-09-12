@@ -1,0 +1,65 @@
+<html>
+	<head>
+		<title>bitcoin app by shifa</title>
+		<style>
+			*{font-size:40px;font-family:Courier;}
+			body{background-color:linen;}
+			h1{border:solid; background-color:white; width:60%;}
+			h2{width:70%;border:solid;border-radius:40px;}
+			input[type=radio]{width:2%;height:0.5em;}
+		</style>
+	</head>
+	
+	<body>
+		<center>
+			<h1> ~ BTC APP ~ </h1>
+			<form onsubmit="gr()">
+				<input type="radio" name="c" id="usd" checked={true}/>USD
+				<input type="radio" name="c" id="gbp" />GBP
+				<input type="radio" name="c" id="eur" />EUR
+				<br/><br/>
+				<input type="submit" value="get live rate" />
+			</form>
+
+			<h2 id="msg"/>
+
+			<script>
+				function gr()
+				{
+					event.preventDefault();
+					let msg=document.getElementById("msg");
+					let usd=document.getElementById("usd");
+					let gbp=document.getElementById("gbp");
+					let eur=document.getElementById("eur");
+					let url= "https://api.coindesk.com/v1/bpi/currentprice.json";
+					
+					fetch(url)
+					.then(res=>res.json())
+					.then(data=>{
+						let r=0.0;
+						let s="";
+						if(usd.checked)
+						{
+							r=data.bpi.USD.rate;
+							s=data.bpi.USD.symbol;	
+						}
+						else if(gbp.checked)
+						{
+							r=data.bpi.GBP.rate;
+							s=data.bpi.GBP.symbol;	
+						}
+						else
+						{
+							r=data.bpi.EUR.rate;
+							s=data.bpi.EUR.symbol;	
+						}
+						msg.innerHTML= s + "" + r;
+						})
+					.catch(err=>{
+						msg.innerHTML="issue :" +err;
+						})
+				}
+			</script>
+		<center>
+	</body>
+</html>
